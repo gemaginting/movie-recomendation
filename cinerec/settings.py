@@ -125,3 +125,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# cinerec/settings.py
+
+# ... (kode pengaturan lainnya) ...
+
+# Media files (Images, videos, etc.)
