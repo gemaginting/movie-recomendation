@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>body { font-family: Arial, sans-serif; padding: 20px; }</style>
+</head>
+<body>
+    <h2>Masuk ke Portal Film</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="padding: 5px 15px;">Login</button>
+    </form>
+    <p>Belum punya akun? <a href="{% url 'register' %}">Daftar di sini</a></p>
+    <br>
+    <a href="{% url 'homepage' %}">⬅ Kembali ke Beranda</a>
+</body>
+</html>

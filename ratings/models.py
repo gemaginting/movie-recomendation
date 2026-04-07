@@ -6,11 +6,12 @@ from django.db import models
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete= models.CASCADE)
-    score = models.FloatField()
+    rating = models.FloatField()
     review = models.TextField(blank = True)
+    timestamp = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.movie.title} - {self.score}"
+        return f"{self.user.username} - {self.movie.title} - {self.rating}"
     
 
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ movie.title }}</title>
+    <style>body { font-family: Arial, sans-serif; padding: 20px; }</style>
+</head>
+<body>
+
+    <a href="{% url 'homepage' %}">⬅ Kembali ke Beranda</a>
+    <hr>
+
+    <h2>{{ movie.title }}</h2>
+    <p><strong>Genre:</strong> {{ movie.genres }}</p>
+
+    <div style="background-color: #f0f0f0; padding: 15px; width: 300px; border-radius: 8px;">
+        <h3>Berikan Rating Anda</h3>
+        
+        {% if request.user.is_authenticated %}
+            {% if user_rating %}
+                <p style="color: green;">Anda sudah memberikan nilai: <strong>{{ user_rating }} / 5.0</strong></p>
+            {% endif %}
+            
+            <form method="POST">
+                {% csrf_token %}
+                <label>Pilih Nilai (0.5 - 5.0):</label><br>
+                <input type="number" name="rating_score" step="0.5" min="0.5" max="5.0" required style="margin-top: 5px;">
+                <button type="submit">Simpan Rating</button>
+            </form>
+        {% else %}
+            <p>Silakan <a href="{% url 'login' %}">Login</a> untuk memberikan rating.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

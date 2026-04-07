@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistem Rekomendasi Film</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .badge { background-color: #007bff; color: white; padding: 5px 10px; border-radius: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px;">
+            {% if request.user.is_authenticated %}
+                <span>Halo, <strong>{{ request.user.username }}</strong>!</span>
+                <form action="{% url 'logout' %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a> | 
+                <a href="{% url 'register' %}">Daftar</a>
+            {% endif %}
+    </div>
+
+    <h1>🎬 Portal Rekomendasi Film</h1>
+    <p>Metode Aktif: <span class="badge">{{ method }}</span></p>
+
+    <hr>
+
+    <h3>Daftar Film Untuk Anda:</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+        {% for movie in recommendations %}
+            <div class="card" style="width: 250px;">
+                <h4 style="margin-top: 0;">
+                    <a href = "{% url 'movie_details' movie.id%}">{{movie.title}}</a>
+                </h4> 
+                <p style="font-size: 14px; color: #555;">{{ movie.genres }}</p>
+            </div>
+        {% empty %}
+            <p>Belum ada film yang bisa ditampilkan.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

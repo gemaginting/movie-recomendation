@@ -1,0 +1,13 @@
+<h1>Rekomendasi Film</h1>
+<p>Metode Aktif: <strong>{{ method }}</strong></p>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    {% for movie in recommendations %}
+    <div style="border: 1px solid #ddd; padding: 10px; width: 200px;">
+        <h3>{{ movie.title }}</h3>
+        <p><small>{{ movie.genres }}</small></p>
+    </div>
+    {% empty %}
+    <p>Tidak ada rekomendasi tersedia.</p>
+    {% endfor %}
+</div>
