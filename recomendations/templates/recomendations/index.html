@@ -8,173 +8,212 @@
 
 {% load static %}
 
-    <div id="hero-content-replacement" style="display: none;">
-        <div class="d-flex flex-column justify-content-center align-items-center text-center px-3 mx-auto" style="max-width: 900px; padding-top: 50px;">
-            <h1 class="fw-bolder text-white mb-3" style="font-size: 4.5rem; letter-spacing: -2px; text-shadow: 4px 4px 15px rgba(0,0,0,0.9);">
-                Selamat datang.
-            </h1>
-            <h2 class="text-white mb-4 fw-normal" style="font-size: 2rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.9);">
-                Film favoritmu tanpa batas, dan lebih banyak lagi.
-            </h2>
-            
-            <div class="mt-4">
-                <a href="{% url 'register' %}" class="btn-liquid-glass">
-                    <div class="glass-effect"></div>
-                    <div class="glass-tint"></div>
-                    <div class="glass-shine"></div>
-                    <span class="btn-text">
-                        Mulai <i class="fw-bold ms-2"></i>
-                    </span>
-                </a>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var content = document.getElementById('hero-content-replacement');
-            var target = document.getElementById('hero-content-insertion-point');
-            if(content && target) {
-                target.innerHTML = content.innerHTML;
-            }
-        });
-    </script>
+<div class="mt-5 pt-4 mb-5">
+    <div class="container">
+        <h4 class="text-white mb-4 fw-bold" style="font-size: 1.5rem; letter-spacing: -0.5px;">
+            <i class="bi bi-fire text-danger me-2"></i> Tontonan Populer
+        </h4>
 
-    <div class="mt-5 pt-4 mb-5">
-        <div class="container">
-            <h4 class="text-white mb-4 fw-bold" style="font-size: 1.5rem; letter-spacing: -0.5px;">
-                <i class="bi bi-fire text-danger me-2"></i> Tontonan Populer
-            </h4>
-            
-            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4">
-                {% for movie in recommendations %}
-                <div class="col">
-                    <div class="card h-100 border-0 bg-transparent movie-card">
-                        <div class="poster-wrapper shadow">
-                            <div class="text-center">
-                                <span class="fs-1 d-block mb-2">🎬</span>
-                                <span class="text-secondary small fw-bold px-2">{{ movie.title|truncatechars:15 }}</span>
-                            </div>
-                            
-                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-end p-2 opacity-0 hover-overlay" style="background: linear-gradient(transparent, rgba(0,0,0,0.8)); transition: 0.3s;">
-                                <small class="text-white fw-bold">Lihat Detail</small>
-                            </div>
-                        </div>
-
-                        <div class="card-body px-0 pt-2">
-                            <a href="{% url 'movie_details' movie.id %}" class="movie-title-link text-truncate">
-                                {{ movie.title }}
-                            </a>
-                            <p class="movie-genre-text mb-0">{{ movie.genres }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="container mt-5 pt-5">
-        <div class="text-center mb-5">
-            <h2 class="fw-black text-white" style="font-size: 2.5rem; letter-spacing: -1.5px;">Kenapa Harus CineRec?</h2>
-            <p class="text-secondary">Teknologi cerdas untuk pengalaman menonton yang lebih personal.</p>
-        </div>
-        
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="feature-card p-5 h-100">
-                    <div class="glass-bg"></div>
-                    <div class="content-layer">
-                        <div class="icon-box mb-4">🤖</div>
-                        <h4 class="fw-bold text-white">Hybrid Engine</h4>
-                        <p class="text-secondary small mb-0">Perpaduan SVD dan Content-Based Filtering untuk akurasi rekomendasi yang belum pernah ada sebelumnya.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="feature-card p-5 h-100">
-                    <div class="glass-bg"></div>
-                    <div class="content-layer">
-                        <div class="icon-box mb-4">🍿</div>
-                        <h4 class="fw-bold text-white">Koleksi Terkurasi</h4>
-                        <p class="text-secondary small mb-0">Ribuan data film dari berbagai dekade dan genre, siap kamu jelajahi dalam hitungan detik.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="feature-card p-5 h-100">
-                    <div class="glass-bg"></div>
-                    <div class="content-layer">
-                        <div class="icon-box mb-4">✨</div>
-                        <h4 class="fw-bold text-white">Interface Modern</h4>
-                        <p class="text-secondary small mb-0">Desain Liquid Glass yang elegan memberikan kenyamanan visual saat kamu mencari tontonan favorit.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-5 pt-5 pb-5" style="max-width: 900px;">
-        <h2 class="fw-black text-center text-white mb-5" style="letter-spacing: -1.5px;"></h2>
-        
-        <div class="accordion accordion-flush" id="accordionCineRec">
-            <div class="accordion-item bg-transparent border-secondary mb-3">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                        Bagaimana CineRec memberikan rekomendasi?
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionCineRec">
-                    <div class="accordion-body text-secondary lh-lg">
-                        Sistem ini menggunakan pendekatan <strong>Hybrid Filtering</strong>. Jika kamu pengguna baru, kami menggunakan <em>Content-Based Filtering</em>. Setelah kamu memberikan rating, algoritma <em>Singular Value Decomposition (SVD)</em> akan bekerja untuk memberikan hasil yang lebih personal.
-                    </div>
-                </div>
-            </div>
-
-            <div class="accordion-item bg-transparent border-secondary mb-3">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4 fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                        Apakah layanan ini gratis?
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionCineRec">
-                    <div class="accordion-body text-secondary lh-lg">
-                        Tentu saja! CineRec adalah proyek penelitian sistem rekomendasi yang bisa diakses oleh siapa saja untuk menemukan referensi film terbaik.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-{% else %}
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold text-white">Rekomendasi Untuk Anda</h2>
-            <span class="badge rounded-pill px-3 py-2" style="background-color: #e50914; font-size: 0.9rem;">
-                🤖 {{ method }}
-            </span>
-        </div>
-
-        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4">
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4 mt-2">
             {% for movie in recommendations %}
             <div class="col">
-                <div class="card h-100 border-0 bg-transparent text-white">
-                    <div class="bg-dark rounded-3 d-flex align-items-center justify-content-center" style="height: 280px; border: 1px solid #333;">
-                        <span class="text-muted">Poster</span>
+                <div class="card h-100 border-0 bg-transparent movie-card" 
+                     data-bs-toggle="modal" 
+                     data-bs-target="#posterModal" 
+                     data-poster="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                     data-title="{{ movie.title }}">
+                    
+                    <div class="poster-wrapper">
+                        {% if movie.poster_path %}
+                        <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" 
+                             class="poster-img" 
+                             alt="{{ movie.title }}"
+                             loading="lazy">
+                        {% else %}
+                        <div class="d-flex flex-column align-items-center justify-content-center h-100 bg-dark text-secondary p-3">
+                            <span class="fs-1 mb-2">🎬</span>
+                            <span class="small text-center">{{ movie.title|truncatechars:20 }}</span>
+                        </div>
+                        {% endif %}
                     </div>
-                    <div class="card-body px-0 pt-3">
-                        <h6 class="card-title text-truncate fw-bold mb-1">
-                            <a href="{% url 'movie_details' movie.id %}" class="text-decoration-none text-white">{{ movie.title }}</a>
-                        </h6>
-                        <p class="small text-secondary">{{ movie.genres }}</p>
+
+                    <div class="card-body px-0 pt-2 text-center">
+                        <span class="movie-title-link text-truncate d-block fw-bold">
+                            {{ movie.title }}
+                        </span>
+                        <p class="movie-genre-text mb-0">{{ movie.genres }}</p>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+
     </div>
+</div>
+
+<hr class="mt-5 mb-5" style="border-color: rgba(255,255,255,0.1);">
+
+<div class="container mt-5 mb-5 text-center reveal-on-scroll" style="max-width: 800px;">
+    <h2 class="fw-bold text-white mb-4" style="letter-spacing: 3px;">About CineRec</h2>
+    <p class="text-secondary lh-lg fs-5">
+        CineRec adalah platform rekomendasi film yang membantu pengguna menemukan tontonan terbaik berdasarkan
+        preferensi dan kemiripan konten.
+        Dengan menganalisis genre, rating, dan karakteristik film, sistem ini menghadirkan rekomendasi yang lebih
+        relevan, personal, dan mudah diakses.
+    </p>
+</div>
+
+<div class="container mt-5 pt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-black text-white" style="font-size: 2.5rem; letter-spacing: -1.5px;">Kenapa Harus CineRec?</h2>
+        <p class="text-secondary">Teknologi cerdas untuk pengalaman menonton yang lebih personal.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card p-5 h-100">
+                <div class="glass-bg"></div>
+                <div class="content-layer">
+                    <div class="icon-box mb-4">🤖</div>
+                    <h4 class="fw-bold text-white">Hybrid Engine</h4>
+                    <p class="text-secondary small mb-0">Perpaduan SVD dan Content-Based Filtering untuk akurasi
+                        rekomendasi yang belum pernah ada sebelumnya.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card p-5 h-100">
+                <div class="glass-bg"></div>
+                <div class="content-layer">
+                    <div class="icon-box mb-4">🍿</div>
+                    <h4 class="fw-bold text-white">Koleksi Terkurasi</h4>
+                    <p class="text-secondary small mb-0">Ribuan data film dari berbagai dekade dan genre, siap kamu
+                        jelajahi dalam hitungan detik.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card p-5 h-100">
+                <div class="glass-bg"></div>
+                <div class="content-layer">
+                    <div class="icon-box mb-4">✨</div>
+                    <h4 class="fw-bold text-white">Interface Modern</h4>
+                    <p class="text-secondary small mb-0">Desain Liquid Glass yang elegan memberikan kenyamanan visual
+                        saat kamu mencari tontonan favorit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 pt-5 pb-5" style="max-width: 900px;">
+    <h2 class="fw-black text-center text-white mb-5" style="letter-spacing: -1.5px;"></h2>
+
+    <div class="accordion accordion-flush" id="accordionCineRec">
+        <div class="accordion-item bg-transparent border-secondary mb-3">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4 fs-5" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                    Bagaimana CineRec memberikan rekomendasi?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionCineRec">
+                <div class="accordion-body text-secondary lh-lg">
+                    Sistem ini menggunakan pendekatan <strong>Hybrid Filtering</strong>. Jika kamu pengguna baru, kami
+                    menggunakan <em>Content-Based Filtering</em>. Setelah kamu memberikan rating, algoritma <em>Singular
+                        Value Decomposition (SVD)</em> akan bekerja untuk memberikan hasil yang lebih personal.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item bg-transparent border-secondary mb-3">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4 fs-5" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                    Apakah layanan ini gratis?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionCineRec">
+                <div class="accordion-body text-secondary lh-lg">
+                    Tentu saja! CineRec adalah proyek penelitian sistem rekomendasi yang bisa diakses oleh siapa saja
+                    untuk menemukan referensi film terbaik.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% else %}
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-white">Rekomendasi Untuk Anda</h2>
+        <span class="badge rounded-pill px-3 py-2" style="background-color: #e50914; font-size: 0.9rem;">
+            🤖 {{ method }}
+        </span>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4">
+        {% for movie in recommendations %}
+        <div class="col">
+            <div class="card h-100 border-0 bg-transparent text-white">
+                <div class="bg-dark rounded-3 d-flex align-items-center justify-content-center"
+                    style="height: 280px; border: 1px solid #333;">
+                    <span class="text-muted">Poster</span>
+                </div>
+                <div class="card-body px-0 pt-3">
+                    <h6 class="card-title text-truncate fw-bold mb-1">
+                        <a href="{% url 'movie_details' movie.id %}" class="text-decoration-none text-white">{{
+                            movie.title }}</a>
+                    </h6>
+                    <p class="small text-secondary">{{ movie.genres }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Modal untuk Menampilkan Poster Full-size -->
+<div class="modal fade" id="posterModal" tabindex="-1" aria-labelledby="posterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body p-0 text-center position-relative">
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 shadow" data-bs-dismiss="modal" aria-label="Close" style="z-index: 100;"></button>
+                <img id="modalPosterImg" src="" class="img-fluid rounded-4 shadow-lg" style="max-height: 85vh; width: auto;" alt="Movie Poster">
+                <div class="mt-3">
+                    <h4 id="modalPosterTitle" class="text-white fw-bold"></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const posterModal = document.getElementById('posterModal');
+    if (posterModal) {
+        posterModal.addEventListener('show.bs.modal', function(event) {
+            // Card yang diklik
+            const card = event.relatedTarget;
+            
+            // Ambil data dari atribut data-*
+            const posterUrl = card.getAttribute('data-poster');
+            const movieTitle = card.getAttribute('data-title');
+            
+            // Update konten modal
+            const modalImg = posterModal.querySelector('#modalPosterImg');
+            const modalTitle = posterModal.querySelector('#modalPosterTitle');
+            
+            modalImg.src = posterUrl;
+            modalImg.alt = movieTitle;
+            modalTitle.textContent = movieTitle;
+        });
+    }
+});
+</script>
 {% endif %}
 
 {% endblock content %}

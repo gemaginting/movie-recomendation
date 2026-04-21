@@ -9,7 +9,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 def get_cbf_cold_start(genre_list, n=10):
     """Logika CBF dari notebook untuk user baru"""
     # Ambil data dari database
-    movies_qs = Movie.objects.all().values('id', 'title', 'genres')
+    movies_qs = Movie.objects.all().values('id', 'title', 'genres', 'poster_path')
     df_movies = pd.DataFrame(list(movies_qs))
     
     if df_movies.empty:
@@ -55,5 +55,5 @@ def get_svd_recommendations(user_id, n=10):
     top_movie_ids = [p[0] for p in predictions[:n]]
     
     # Ambil detail film dari database
-    result_movies = Movie.objects.filter(id__in=top_movie_ids).values('id','title', 'genres')
+    result_movies = Movie.objects.filter(id__in=top_movie_ids).values('id','title', 'genres', 'poster_path')
     return list(result_movies)

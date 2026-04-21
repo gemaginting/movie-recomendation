@@ -18,8 +18,8 @@ def homepage(request):
             recom_method = "Hybrid: SVD Collaborative Filtering"
             recommendations = get_svd_recommendations(u_id, n=10)
     else:
-        # Ambil 10 film langsung sebagai objek model
-        recommendations = Movie.objects.all()[:10].values('id','title', 'genres')
+        # Ambil 10 film langsung sebagai objek model termasuk poster
+        recommendations = Movie.objects.all()[:10].values('id','title', 'genres', 'poster_path')
 
     return render(request, 'recomendations/index.html', {
         'recommendations': recommendations,
