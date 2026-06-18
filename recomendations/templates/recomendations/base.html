@@ -5,10 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineRec - {% block title %}Portal Film{% endblock %}</title>
+    <title>Lumo - {% block title %}Portal Film{% endblock %}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1,2&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'recomendations/css/style.css' %}">
 </head>
@@ -16,22 +19,31 @@
 <body>
 
 
-    <header class="site-header">
-        <div class="inside-header">
-            <a class="navbar-logo" href="{% url 'homepage' %}">CineRec</a>
+    <!-- Bingkai Luar (Global Frame) -->
+    <div class="global-window-frame"></div>
 
-            <div class="d-flex align-items-center">
-                {% if request.user.is_authenticated %}
-                <span class="text-light me-3">Halo, <strong>{{ request.user.username }}</strong></span>
-                <form action="{% url 'logout' %}" method="POST" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3">Logout</button>
-                </form>
-                {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm me-3 rounded-pill px-3">Masuk</a>
-                <a href="{% url 'register' %}" class="btn btn-primary btn-sm rounded-pill px-3">Daftar</a>
-                {% endif %}
+    <header class="site-header-modular">
+        <!-- BLOK KIRI: Logo -->
+        <div class="nav-block-left">
+            <a class="nav-item-box logo-box" href="{% url 'homepage' %}">LUMO</a>
+        </div>
+
+        <!-- BLOK KANAN: Auth / CTA -->
+        <div class="nav-block-right">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'select_genres' %}" class="nav-item-box text-box d-none d-md-block"><i class="bi bi-gear me-2"></i> GENRE SAYA</a>
+            <div class="nav-item-box text-box d-none d-md-block" role="button" data-bs-toggle="modal" data-bs-target="#methodModal" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.color='#4af626'" onmouseout="this.style.color='white'">
+                Halo, {{ request.user.username }}
             </div>
+            <form action="{% url 'logout' %}" method="POST" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-item-box cta-box-danger">LOGOUT <i
+                        class="bi bi-box-arrow-right ms-2"></i></button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="nav-item-box text-box">- MASUK -</a>
+            <a href="{% url 'register' %}" class="nav-item-box cta-box">- DAFTAR -<i></i></a>
+            {% endif %}
         </div>
     </header>
 
@@ -39,44 +51,42 @@
     {% if not request.user.is_authenticated and request.path == '/' %}
 
     <div id="guest-hero-container">
-        <div class="container-fluid px-0">
-            <div class="row align-items-center min-vh-90">
-                <!-- Sisi Kiri: Teks Hero dan Tombol -->
-                <div class="col-lg-7">
-                    <div class="hero-content-left">
-                        <h1 class="hero-title">Temukan Film Yang Cocok Untukmu</h1>
-                        <p class="hero-subtitle">preferensi. kesamaan. rekomendasi.</p>
-                        
-                        <div class="mt-2 text-start">
-                            <a href="{% url 'register' %}" class="btn-premium-glass">
-                                Mulai Sekarang
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        <!-- Video Background -->
+        <video autoplay muted loop playsinline class="hero-video-bg">
+            <source src="{% static 'recomendations/img/background_vid.webm' %}" type="video/mp4">
+        </video>
 
-                <!-- Sisi Kanan: Movie Carousel (Opsional/Pendukung) -->
-                <div class="col-lg-5 d-none d-lg-block">
-                    <div class="hero-poster-wrapper">
-                        <div id="heroMovieCarousel" class="carousel slide carousel-fade shadow-lg" data-bs-ride="carousel" data-bs-interval="3000">
-                            <div class="carousel-inner h-100 rounded-4">
-                                {% for movie in recommendations|slice:":10" %}
-                                <div class="carousel-item {% if forloop.first %}active{% endif %} h-100">
-                                    {% if movie.poster_path %}
-                                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="d-block w-100 h-100 object-fit-contain" alt="{{ movie.title }}">
-                                    {% else %}
-                                    <div class="d-flex align-items-center justify-content-center h-100 bg-dark text-secondary p-4 text-center">
-                                        <span class="small">Poster film "{{ movie.title }}" sedang disiapkan...</span>
-                                    </div>
-                                    {% endif %}
+        <div class="container-fluid px-0">
+            <div class="row align-items-center min-vh-100">
+                <!-- Sisi Utama: Modular Window (Melayang di atas Video) -->
+                <div class="col-lg-10 col-xl-8 mx-auto">
+                    <div class="hero-modular-window">
+                        <!-- Header Jendela ala Referensi -->
+                        <div class="window-header-bar">
+                            <div class="header-label"><i class="bi bi-cpu-fill me-4"></i> SYSTEM MESSAGE
+                            </div>
+                            <div class="window-controls">
+                                <span class="vintage-btn min">_</span>
+                                <span class="vintage-btn max">□</span>
+                                <span class="vintage-btn close">×</span>
+                            </div>
+                        </div>
+
+                        <div class="window-content">
+                            <div class="row align-items-end">
+                                <div class="col-md-8">
+                                    <h1 class="hero-title">Temukan <br> Film Yang <br> Cocok Untukmu</h1>
+                                    <p class="hero-subtitle"><span id="typed-text" class="font-lores"
+                                            style="color: #4af626; text-shadow: 0 0 10px rgba(74, 246, 38, 0.5);"></span>
+                                    </p>
                                 </div>
-                                {% empty %}
-                                <div class="carousel-item active h-100">
-                                    <div class="d-flex align-items-center justify-content-center h-100 bg-dark text-secondary p-4 text-center">
-                                        <span class="small">Belum ada data film sorotan.</span>
+                                <div class="col-md-4 text-md-end">
+                                    <div class="mt-4 mt-md-0">
+                                        <a href="{% url 'register' %}" class="btn-modular-cta">
+                                            MULAI SEKARANG >>
+                                        </a>
                                     </div>
                                 </div>
-                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -86,11 +96,66 @@
     </div>
     {% endif %}
 
-    <div class="container mt-5"> {% block content %}
-        {% endblock content %}
+    <!-- Modal Status Metode Rekomendasi -->
+    <div class="modal fade" id="methodModal" tabindex="-1" aria-labelledby="methodModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: rgba(15, 15, 15, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); color: white; border-radius: 15px;">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title font-lores" id="methodModalLabel" style="color: #4af626;"><i class="bi bi-cpu-fill me-2"></i> SYSTEM STATUS</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center pt-4 pb-4">
+            <p class="text-white-50 mb-2" style="letter-spacing: 1px; font-size: 0.85rem;">METODE REKOMENDASI AKTIF</p>
+            <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom: 30px;">{{ method|default:"N/A (Halaman Detail)" }}</h4>
+            
+            <div class="row text-start border-top border-secondary pt-3 mx-1">
+                <div class="col-5">
+                    <p class="text-white-50 mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Film Dirating</p>
+                    <h5 class="text-white mb-0" style="font-weight: 600;">{{ request.user.rating_set.count|default:"0" }} <span class="text-muted" style="font-size: 0.8rem; font-weight: 400;">Film</span></h5>
+                </div>
+                <div class="col-7 border-start border-secondary">
+                    <p class="text-white-50 mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Preferensi Genre</p>
+                    <div class="text-white mb-0" style="font-size: 0.85rem; line-height: 1.4; word-wrap: break-word;">
+                        <span id="genre-badge-container">
+                            {{ request.user.profile.preferred_genre|default:"Belum Diatur" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <script>
+        // Mengubah format genre dari "Action|Comedy" menjadi "Action, Comedy" di modal
+        document.addEventListener('DOMContentLoaded', function() {
+            var genreContainer = document.getElementById('genre-badge-container');
+            if(genreContainer && genreContainer.innerText.includes('|')) {
+                var genres = genreContainer.innerText.trim().split('|');
+                genreContainer.innerHTML = genres.map(g => '<span class="badge bg-secondary me-1 mb-1">' + g + '</span>').join('');
+            }
+        });
+    </script>
+
+    {% block content %}
+    {% endblock content %}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script>
+        var typed = new Typed('#typed-text', {
+            strings: ['preferensi.', 'kesamaan.', 'rekomendasi.'],
+            typeSpeed: 70,
+            backSpeed: 50,
+            backDelay: 1000,
+            startDelay: 500,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|',
+            autoInsertCss: true,
+        });
+    </script>
 
     <script>
         // --- LOGIKA SCROLL REVEAL (JS VERSION) ---
@@ -110,6 +175,16 @@
             // Mendaftarkan semua elemen dengan class .reveal-on-scroll ke observer
             const revealElements = document.querySelectorAll('.reveal-on-scroll');
             revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
+    <script>
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.site-header-modular');
+            if (window.scrollY > 600) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
         });
     </script>
 </body>

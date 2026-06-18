@@ -1,36 +1,103 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ movie.title }}</title>
-    <style>body { font-family: Arial, sans-serif; padding: 20px; }</style>
-</head>
-<body>
+{% extends 'recomendations/base.html' %}
 
-    <a href="{% url 'homepage' %}">⬅ Kembali ke Beranda</a>
-    <hr>
+{% block title %}{{ movie.title }} - Details{% endblock %}
 
-    <h2>{{ movie.title }}</h2>
-    <p><strong>Genre:</strong> {{ movie.genres }}</p>
-
-    <div style="background-color: #f0f0f0; padding: 15px; width: 300px; border-radius: 8px;">
-        <h3>Berikan Rating Anda</h3>
-        
-        {% if request.user.is_authenticated %}
-            {% if user_rating %}
-                <p style="color: green;">Anda sudah memberikan nilai: <strong>{{ user_rating }} / 5.0</strong></p>
-            {% endif %}
-            
-            <form method="POST">
-                {% csrf_token %}
-                <label>Pilih Nilai (0.5 - 5.0):</label><br>
-                <input type="number" name="rating_score" step="0.5" min="0.5" max="5.0" required style="margin-top: 5px;">
-                <button type="submit">Simpan Rating</button>
-            </form>
-        {% else %}
-            <p>Silakan <a href="{% url 'login' %}">Login</a> untuk memberikan rating.</p>
-        {% endif %}
+{% block content %}
+<div class="movie-details-hero" style="position: relative; min-height: 100vh; padding-top: 100px; background: #080808;">
+    <!-- Backdrop Background (Blurred) -->
+    <div class="movie-backdrop-bg" 
+         style="position: absolute; inset: 0; background-image: url('https://image.tmdb.org/t/p/original{{ movie.backdrop_path }}'); background-size: cover; background-position: center; filter: blur(30px) brightness(0.3); opacity: 0.6; z-index: 0;">
     </div>
 
-</body>
-</html>
+    <div class="container position-relative reveal-on-scroll" style="z-index: 2;">
+        <div class="showcase-window" style="position: relative; inset: auto; width: 100%; margin-bottom: 50px;">
+            <!-- Window Header -->
+            <div class="window-header-bar d-flex justify-content-between align-items-center">
+                <div class="header-label">SYSTEM_DATA // MOVIE_PROFILE // {{ movie.id }}</div>
+                <div class="window-controls">
+                    <a href="{% url 'homepage' %}" class="vintage-btn text-decoration-none" style="padding: 2px 15px;"> < </a>
+                </div>
+            </div>
+
+            <!-- Window Content -->
+            <div class="window-content p-4 p-md-5">
+                <div class="row">
+                    <!-- Left: Poster -->
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <div class="poster-frame" style="border: 1px solid rgba(255,255,255,0.15); border-radius: 15px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+                            {% if movie.poster_path %}
+                            <img src="https://image.tmdb.org/t/p/w780{{ movie.poster_path }}" class="img-fluid" alt="{{ movie.title }}">
+                            {% else %}
+                            <div class="d-flex align-items-center justify-content-center bg-dark" style="aspect-ratio: 2/3;">
+                                <span class="text-muted">NO_IMAGE</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Right: Info -->
+                    <div class="col-lg-8 ps-lg-5">
+                        <h1 class="display-4 fw-bold text-white mb-3" style="letter-spacing: -1px;">{{ movie.title }}</h1>
+                        
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            {% if movie.genres %}
+                                {% for genre in movie.genres_list %}
+                                <span class="genre-badge-tech">{{ genre }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-5">
+                            <h5 class="text-cream small text-uppercase mb-3" style="font-family: 'Lores', sans-serif; letter-spacing: 2px; opacity: 0.9;">Synopsis</h5>
+                            <p class="text-main fs-5 lh-lg opacity-75">
+                                {{ movie.overview|default:"Data sinopsis tidak tersedia dalam database sistem." }}
+                            </p>
+                        </div>
+
+                        <!-- Rating Section -->
+                        <div class="rating-modular-window p-4 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
+                            <h5 class="text-white small text-uppercase mb-4" style="font-family: 'Lores', sans-serif; opacity: 0.8;">User Rating Terminal</h5>
+                            
+                            {% if request.user.is_authenticated %}
+                                <div class="row align-items-center">
+                                    <div class="col-md-5">
+                                        {% if user_rating %}
+                                        <div class="p-3 border border-success border-opacity-25 rounded-3 mb-3 mb-md-0" style="background: rgba(74, 246, 38, 0.05);">
+                                            <span class="text-muted small d-block mb-1" style="color: rgba(255,255,255,0.6) !important;">Status: ALREADY_RATED</span>
+                                            <span class="h4 fw-bold" style="color: #4af626;">★ {{ user_rating|floatformat:1 }} / 5.0</span>
+                                        </div>
+                                        {% else %}
+                                        <span class="text-muted small" style="color: rgba(255,255,255,0.6) !important;">Status: AWAITING_INPUT</span>
+                                        <p class="text-white small mt-1">Berikan penilaian Anda untuk meningkatkan akurasi rekomendasi.</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-7">
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <div class="d-flex align-items-center justify-content-md-end gap-4">
+                                                <div class="star-rating-terminal">
+                                                    <input type="radio" id="star5" name="rating_score" value="5" {% if user_rating == 5 %}checked{% endif %} required /><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                                                    <input type="radio" id="star4" name="rating_score" value="4" {% if user_rating == 4 %}checked{% endif %} /><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                                                    <input type="radio" id="star3" name="rating_score" value="3" {% if user_rating == 3 %}checked{% endif %} /><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                                                    <input type="radio" id="star2" name="rating_score" value="2" {% if user_rating == 2 %}checked{% endif %} /><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                                                    <input type="radio" id="star1" name="rating_score" value="1" {% if user_rating == 1 %}checked{% endif %} /><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                                                </div>
+                                                <button type="submit" class="btn-save-rating">SAVE_DATA</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-2">
+                                    <p class="text-muted small mb-3">Otentikasi diperlukan untuk interaksi data.</p>
+                                    <a href="{% url 'login' %}" class="btn-modular-cta d-inline-block px-4 py-2 text-decoration-none">LOGIN_SISTEM</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

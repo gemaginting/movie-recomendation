@@ -1,0 +1,51 @@
+{% extends 'recomendations/base.html' %}
+
+{% block content %}
+<div class="auth-wrapper d-flex align-items-center justify-content-center" style="min-height: 90vh; padding: 60px 0;">
+    <div class="auth-card reveal-on-scroll">
+        <!-- Window Header Bar -->
+        <div class="window-header-bar d-flex justify-content-between align-items-center">
+            <div class="header-label">SYSTEM_PREFERENCES // CHOOSE_GENRES</div>
+            <div class="window-controls">
+                <a href="{% url 'homepage' %}" class="vintage-btn text-decoration-none" style="padding: 2px 15px;">
+                    < </a>
+            </div>
+        </div>
+
+        <div class="window-content p-4 p-md-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-white mb-2" style="letter-spacing: -1px; font-family: 'Satoshi', sans-serif;">
+                    Genre Favorit Anda</h2>
+                <p class="text-muted small text-uppercase"
+                    style="letter-spacing: 2px; font-family: 'Lores', sans-serif;">Pilih minimal 1 genre pilihan</p>
+            </div>
+
+            <form method="POST" class="auth-form">
+                {% csrf_token %}
+
+                <div class="form-group mb-4">
+                    <label class="mb-3 d-block">
+                        > GENRE UTAMA
+                    </label>
+                    
+                    <div id="id_preferred_genres">
+                        {% for genre in genres %}
+                        <div>
+                            <label for="genre_{{ forloop.counter }}">
+                                <input type="checkbox" name="preferred_genres" value="{{ genre }}" id="genre_{{ forloop.counter }}"
+                                    {% if genre in current_genres %}checked{% endif %}>
+                                {{ genre }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-modular-cta w-100 py-3 mt-3 border-0">
+                    SIMPAN PREFERENSI
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
